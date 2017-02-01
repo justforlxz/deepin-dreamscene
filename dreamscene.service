@@ -1,0 +1,8 @@
+[Unit]
+Description=Dream Scene
+
+[Service]
+ExecStart=/usr/bin/dreamscene
+
+[Install]
+WantedBy=default.target
