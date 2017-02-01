@@ -17,3 +17,10 @@ cd DreamScene && mkdir build && cd build && qmake ../ && make && sudo cp dreamsc
 ```
 systemctl --user enable dreamscene && systemctl --user start dreamscene
 ```
+
+
+壁纸素材下载:
+
+```
+链接: https://pan.baidu.com/s/1skONEcH 密码: 6rr5
+```
