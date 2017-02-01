@@ -24,3 +24,6 @@ systemctl --user enable dreamscene && systemctl --user start dreamscene
 ```
 链接: https://pan.baidu.com/s/1skONEcH 密码: 6rr5
 ```
+
+
+<embed height="415" width="544" quality="high" allowfullscreen="true" type="application/x-shockwave-flash" src="//static.hdslb.com/miniloader.swf" flashvars="aid=7892530&page=1" pluginspage="//www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash"></embed>
