@@ -18,10 +18,10 @@ cd DreamScene && mkdir build && cd build && qmake ../ && make && sudo cp dreamsc
 文件内容在代码中，需要自行修改内部的source为自己视频的地址。   
 然后运行编译好的二进制。   
 目前仅支持DDE桌面环境。
-附带了systemd单元文件。
+附带了desktop文件，复制到自动启动目录。
 
 ```
-systemctl --user enable dreamscene && systemctl --user start dreamscene
+cp dreamscene.desktop ~/.config/autostart/
 ```
 
 

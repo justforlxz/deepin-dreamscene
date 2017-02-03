@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Dreamscene
+Comment=Deepin Dreamscene
+Type=Application
+Exec=/usr/bin/dreamscene
+NoDisplay=false
+
