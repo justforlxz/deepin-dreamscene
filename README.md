@@ -4,6 +4,12 @@
 git clone https://github.com/kirigayakazushin/DreamScene.git
 ```
 
+依赖包：
+
+```
+libqt5x11extras5-dev libxcb-ewmh-dev qtdeclarative5-dev
+```
+
 ```
 cd DreamScene && mkdir build && cd build && qmake ../ && make && sudo cp dreamscene /usr/bin/ && sudo chmod +x /usr/bin/dreamscene
 ```
