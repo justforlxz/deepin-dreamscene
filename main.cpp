@@ -1,51 +1,53 @@
-#include <QGuiApplication>
-
+#include <QApplication>
 #include <QObject>
-#include <QGuiApplication>
-#include <QQuickView>
 #include <QtX11Extras/QX11Info>
 #include <QScreen>
-#include <QQuickItem>
-#include "QQmlContext"
-
 #include <xcb/xcb.h>
 #include <xcb/xcb_ewmh.h>
-
-#include <sys/types.h>    // defines special types
-#include <pwd.h>    // defines the passwd structure
-#include <unistd.h>//header for getuid system call
+#include <QCommandLineOption>
+#include <QCommandLineParser>
+#include <QDebug>
+#include "wallpaper.h"
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication a(argc, argv);
+    QApplication a(argc, argv);
+    QApplication::setApplicationName("DDE Dream Scene");
+    QApplication::setApplicationVersion("Version 0.1");
 
-    QQuickView *w;
+    QCommandLineOption videopath("path", "set video path", "");
+    videopath.setValueName("path");
 
-    w = new QQuickView;
-    xcb_ewmh_connection_t m_ewmh_connection;
-    xcb_intern_atom_cookie_t *cookie = xcb_ewmh_init_atoms(QX11Info::connection(), &m_ewmh_connection);
-    xcb_ewmh_init_atoms_replies(&m_ewmh_connection, cookie, NULL);
+    QCommandLineParser parser;
 
-    xcb_atom_t atoms[1];
-    atoms[0] = m_ewmh_connection._NET_WM_WINDOW_TYPE_DESKTOP;
-    xcb_ewmh_set_wm_window_type(&m_ewmh_connection, w->winId(), 1, atoms);
+    parser.setApplicationDescription("Dream Scene");
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addOption(videopath);
+    parser.process(a);
 
-    struct passwd *user;
-    user = getpwuid(getuid());
 
-    QString videopath = QString(user->pw_dir) + "/.local/mkacg/main.qml";
+    if (parser.isSet(videopath)) {
+        Wallpaper *w = new Wallpaper(parser.value(videopath));
 
-    w->setSource(QUrl(videopath));
-    w->setGeometry(qApp->primaryScreen()->geometry());
-    w->show();
-    w->lower();
+        xcb_ewmh_connection_t m_ewmh_connection;
+        xcb_intern_atom_cookie_t *cookie = xcb_ewmh_init_atoms(QX11Info::connection(), &m_ewmh_connection);
+        xcb_ewmh_init_atoms_replies(&m_ewmh_connection, cookie, NULL);
 
-    QObject::connect(qApp->primaryScreen(), &QScreen::geometryChanged, [=] {
+        xcb_atom_t atoms[1];
+        atoms[0] = m_ewmh_connection._NET_WM_WINDOW_TYPE_DESKTOP;
+        xcb_ewmh_set_wm_window_type(&m_ewmh_connection, w->winId(), 1, atoms);
+
         w->setGeometry(qApp->primaryScreen()->geometry());
+        w->show();
         w->lower();
-    });
+        w->play();
 
-
+        QObject::connect(qApp->primaryScreen(), &QScreen::geometryChanged, [=] {
+            w->setGeometry(qApp->primaryScreen()->geometry());
+            w->lower();
+        });
+    }
 
     return a.exec();
 }
