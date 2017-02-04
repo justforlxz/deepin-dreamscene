@@ -8,12 +8,21 @@
 #include <QCommandLineParser>
 #include <QDebug>
 #include "wallpaper.h"
+#include "settings.h"
+#include "trayicon.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     QApplication::setApplicationName("DDE Dream Scene");
     QApplication::setApplicationVersion("Version 0.1");
+
+    TrayIcon *t = new TrayIcon;
+
+    Settings * s = new Settings;
+
+    QObject::connect(t, &TrayIcon::show, s, &Settings::show);
+
 
     QCommandLineOption videopath("path", "set video path", "");
     videopath.setValueName("path");
@@ -25,7 +34,6 @@ int main(int argc, char *argv[])
     parser.addVersionOption();
     parser.addOption(videopath);
     parser.process(a);
-
 
     if (parser.isSet(videopath)) {
         Wallpaper *w = new Wallpaper(parser.value(videopath));
