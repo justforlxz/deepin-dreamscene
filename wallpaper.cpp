@@ -2,6 +2,7 @@
 #include <QVideoWidget>
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <QMediaPlaylist>
 
 Wallpaper::Wallpaper(const QString path, QWidget *parent) : QWidget(parent)
 {
@@ -11,10 +12,15 @@ Wallpaper::Wallpaper(const QString path, QWidget *parent) : QWidget(parent)
     QVideoWidget *videoWidget = new QVideoWidget;
     mainlayout->addWidget(videoWidget);
     mediaPlayer.setVideoOutput(videoWidget);
+
     setLayout(mainlayout);
 
-    mediaPlayer.setMedia(QUrl("file://" + path));
+    QMediaPlaylist *playlist = new QMediaPlaylist(&mediaPlayer);
+    playlist->addMedia(QUrl("file://" +  path));
+    playlist->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
+    mediaPlayer.setPlaylist(playlist);
     mediaPlayer.pause();
+
     videoWidget->show();
 }
 
