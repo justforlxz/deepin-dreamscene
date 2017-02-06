@@ -10,7 +10,8 @@ Wallpaper::Wallpaper(const QString path, QWidget *parent) : QWidget(parent)
     mainlayout->setMargin(0);
     mainlayout->setSpacing(0);
     QVideoWidget *videoWidget = new QVideoWidget;
-    mainlayout->addWidget(videoWidget);
+    videoWidget->setAspectRatioMode(Qt::KeepAspectRatioByExpanding);
+    mainlayout->addWidget(videoWidget, 0, Qt::AlignCenter);
     mediaPlayer.setVideoOutput(videoWidget);
 
     setLayout(mainlayout);
