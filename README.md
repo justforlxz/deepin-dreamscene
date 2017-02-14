@@ -1,3 +1,7 @@
+第一版本请访问[release](https://github.com/kirigayakazushin/DreamScene/releases)
+
+后续版本还在开发中，新版本将支持设置面板和配置文件，以及参数启动。
+
 获取代码，然后自行编译。
 
 ```
