@@ -1,4 +1,3 @@
-#include <QApplication>
 #include <QObject>
 #include <QtX11Extras/QX11Info>
 #include <QScreen>
@@ -6,23 +5,24 @@
 #include <xcb/xcb_ewmh.h>
 #include <QCommandLineOption>
 #include <QCommandLineParser>
-#include <QDebug>
+#include <DApplication>
 #include "wallpaper.h"
 #include "settings.h"
 #include "trayicon.h"
 
+DWIDGET_USE_NAMESPACE
+
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    QApplication::setApplicationName("DDE Dream Scene");
-    QApplication::setApplicationVersion("Version 0.1");
+    DApplication::loadDXcbPlugin();
+    DApplication a(argc, argv);
+
+    a.setApplicationName("DDE Dream Scene");
+    a.setApplicationVersion("Version 0.1");
 
     TrayIcon *t = new TrayIcon;
-
     Settings * s = new Settings;
-
     QObject::connect(t, &TrayIcon::show, s, &Settings::show);
-
 
     QCommandLineOption videopath("path", "set video path", "");
     videopath.setValueName("path");

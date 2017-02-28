@@ -1,14 +1,15 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include "blurredframe.h"
-
+#include <DBlurEffectWidget>
 #include <QWidget>
 #include <QMouseEvent>
 #include <QPoint>
 #include <QListWidget>
 
-class Settings : public BlurredFrame
+DWIDGET_USE_NAMESPACE
+
+class Settings : public DBlurEffectWidget
 {
 public:
     explicit Settings(QWidget *parent = 0);

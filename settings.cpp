@@ -7,7 +7,7 @@
 #include <QFileInfo>
 
 Settings::Settings(QWidget *parent):
-    BlurredFrame(parent),
+    DBlurEffectWidget(parent),
     listWidget(new QListWidget)
 {
     setFixedSize(800, 600);
@@ -15,6 +15,10 @@ Settings::Settings(QWidget *parent):
     listWidget->setStyleSheet("background-color:transparent");
     setWindowFlags(Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_TranslucentBackground, true);
+    setBlendMode(DBlurEffectWidget::BehindWindowBlend);
+    setBlurRectXRadius(10);
+    setBlurRectYRadius(10);
+    setMaskColor(QColor(245, 245, 245));
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setSpacing(0);
@@ -63,9 +67,8 @@ Settings::Settings(QWidget *parent):
 
 void Settings::resizeEvent(QResizeEvent *e)
 {
-    BlurredFrame::resizeEvent(e);
+    DBlurEffectWidget::resizeEvent(e);
 }
-
 
 void Settings::mouseMoveEvent(QMouseEvent *e)
 {
