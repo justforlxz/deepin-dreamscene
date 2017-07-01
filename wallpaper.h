@@ -19,6 +19,9 @@ public slots:
     void clear();
 
 private:
+    void registerDesktop();
+
+private:
     QVBoxLayout *mainlayout;
     QMediaPlayer *mediaPlayer;
     QMediaPlaylist *playlist;

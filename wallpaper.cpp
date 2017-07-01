@@ -21,6 +21,8 @@ Wallpaper::Wallpaper(QWidget *parent) : QWidget(parent)
     videoWidget = new DVideoWidget;
     layout->addWidget(videoWidget);
 
+    videoWidget->setAttribute(Qt::WA_TranslucentBackground);
+
     videoWidget->setAspectRatioMode(Qt::KeepAspectRatioByExpanding);
 
     mediaPlayer = new QMediaPlayer;
@@ -40,13 +42,11 @@ Wallpaper::Wallpaper(QWidget *parent) : QWidget(parent)
         videoWidget->resize(size());
         lower();
     });
-
-    hide();
 }
 
 void Wallpaper::setVideoFile(const QStringList &videolist, int volume, bool range)
 {
-    clear();
+    playlist->clear();
 
     for (const QString &file : videolist) {
         if (QFile::exists(file))
@@ -60,9 +60,22 @@ void Wallpaper::setVideoFile(const QStringList &videolist, int volume, bool rang
     else
         playlist->setPlaybackMode(QMediaPlaylist::Loop);
 
+    registerDesktop();
+
     mediaPlayer->play();
     mediaPlayer->setVolume(volume);
 
+}
+
+void Wallpaper::clear()
+{
+    hide();
+    mediaPlayer->stop();
+    playlist->clear();
+}
+
+void Wallpaper::registerDesktop()
+{
     xcb_ewmh_connection_t m_ewmh_connection;
     xcb_intern_atom_cookie_t *cookie = xcb_ewmh_init_atoms(QX11Info::connection(), &m_ewmh_connection);
     xcb_ewmh_init_atoms_replies(&m_ewmh_connection, cookie, NULL);
@@ -73,11 +86,4 @@ void Wallpaper::setVideoFile(const QStringList &videolist, int volume, bool rang
 
     show();
     lower();
-}
-
-void Wallpaper::clear()
-{
-    hide();
-    mediaPlayer->stop();
-    playlist->clear();
 }
