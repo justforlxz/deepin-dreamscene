@@ -3,17 +3,24 @@ TEMPLATE = app
 QT += gui x11extras widgets multimediawidgets multimedia dbus
 CONFIG += c++11 link_pkgconfig
 PKGCONFIG += xcb xcb-ewmh dtkwidget dtkbase
+TARGET = dde-wallpaper
 
 SOURCES += main.cpp \
     wallpaper.cpp \
     dbuswallpaperservice.cpp
 
-# Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH =
-
 HEADERS += \
     wallpaper.h \
     dbuswallpaperservice.h
 
-RESOURCES += \
-    resource.qrc
+RESOURCES +=
+
+target.path = /usr/bin/
+
+DISTFILES += \
+    com.deepin.dde.Wallpaper.service
+
+dbus_service.files += com.deepin.dde.Wallpaper.service
+dbus_service.path = /usr/share/dbus-1/services
+
+INSTALLS += target dbus_service
