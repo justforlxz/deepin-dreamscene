@@ -4,6 +4,9 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QMediaPlayer>
+#include <DVideoWidget>
+
+DWIDGET_USE_NAMESPACE
 
 class Wallpaper : public QWidget
 {
@@ -19,6 +22,7 @@ private:
     QVBoxLayout *mainlayout;
     QMediaPlayer *mediaPlayer;
     QMediaPlaylist *playlist;
+    DVideoWidget *videoWidget;
 };
 
 #endif // WALLPAPER_H

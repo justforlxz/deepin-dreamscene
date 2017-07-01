@@ -8,21 +8,18 @@
 #include <QScreen>
 #include <xcb/xcb.h>
 #include <xcb/xcb_ewmh.h>
-#include <DVideoWidget>
-
-DWIDGET_USE_NAMESPACE
 
 Wallpaper::Wallpaper(QWidget *parent) : QWidget(parent)
 {
-    xcb_ewmh_connection_t m_ewmh_connection;
-    xcb_intern_atom_cookie_t *cookie = xcb_ewmh_init_atoms(QX11Info::connection(), &m_ewmh_connection);
-    xcb_ewmh_init_atoms_replies(&m_ewmh_connection, cookie, NULL);
+    setAttribute(Qt::WA_TranslucentBackground);
 
-    xcb_atom_t atoms[1];
-    atoms[0] = m_ewmh_connection._NET_WM_WINDOW_TYPE_DESKTOP;
-    xcb_ewmh_set_wm_window_type(&m_ewmh_connection, winId(), 1, atoms);
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->setSpacing(0);
+    layout->setMargin(0);
+    setLayout(layout);
 
-    DVideoWidget *videoWidget = new DVideoWidget(this);
+    videoWidget = new DVideoWidget;
+    layout->addWidget(videoWidget);
 
     videoWidget->setAspectRatioMode(Qt::KeepAspectRatioByExpanding);
 
@@ -34,17 +31,17 @@ Wallpaper::Wallpaper(QWidget *parent) : QWidget(parent)
     mediaPlayer->setPlaylist(playlist);
 
     mediaPlayer->pause();
-    videoWidget->show();
 
     setGeometry(qApp->primaryScreen()->geometry());
     videoWidget->resize(size());
-    lower();
 
     connect(qApp->primaryScreen(), &QScreen::geometryChanged, [=] {
         setGeometry(qApp->primaryScreen()->geometry());
         videoWidget->resize(size());
         lower();
     });
+
+    hide();
 }
 
 void Wallpaper::setVideoFile(const QStringList &videolist, int volume, bool range)
@@ -65,7 +62,17 @@ void Wallpaper::setVideoFile(const QStringList &videolist, int volume, bool rang
 
     mediaPlayer->play();
     mediaPlayer->setVolume(volume);
+
+    xcb_ewmh_connection_t m_ewmh_connection;
+    xcb_intern_atom_cookie_t *cookie = xcb_ewmh_init_atoms(QX11Info::connection(), &m_ewmh_connection);
+    xcb_ewmh_init_atoms_replies(&m_ewmh_connection, cookie, NULL);
+
+    xcb_atom_t atoms[1];
+    atoms[0] = m_ewmh_connection._NET_WM_WINDOW_TYPE_DESKTOP;
+    xcb_ewmh_set_wm_window_type(&m_ewmh_connection, winId(), 1, atoms);
+
     show();
+    lower();
 }
 
 void Wallpaper::clear()
