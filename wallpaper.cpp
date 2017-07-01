@@ -8,6 +8,9 @@
 #include <QScreen>
 #include <xcb/xcb.h>
 #include <xcb/xcb_ewmh.h>
+#include <DVideoWidget>
+
+DWIDGET_USE_NAMESPACE
 
 Wallpaper::Wallpaper(QWidget *parent) : QWidget(parent)
 {
@@ -19,31 +22,29 @@ Wallpaper::Wallpaper(QWidget *parent) : QWidget(parent)
     atoms[0] = m_ewmh_connection._NET_WM_WINDOW_TYPE_DESKTOP;
     xcb_ewmh_set_wm_window_type(&m_ewmh_connection, winId(), 1, atoms);
 
-    setGeometry(qApp->primaryScreen()->geometry());
-    lower();
+    DVideoWidget *videoWidget = new DVideoWidget(this);
 
-    connect(qApp->primaryScreen(), &QScreen::geometryChanged, [=] {
-        setGeometry(qApp->primaryScreen()->geometry());
-        lower();
-    });
-
-    mainlayout = new QVBoxLayout(this);
-    mainlayout->setMargin(0);
-    mainlayout->setSpacing(0);
-    setLayout(mainlayout);
-
-    QVideoWidget *videoWidget = new QVideoWidget;
     videoWidget->setAspectRatioMode(Qt::KeepAspectRatioByExpanding);
-    mainlayout->addWidget(videoWidget, 0, Qt::AlignCenter);
 
     mediaPlayer = new QMediaPlayer;
     playlist = new QMediaPlaylist(mediaPlayer);
 
-    mediaPlayer->setVideoOutput(videoWidget);
+    videoWidget->setSource(mediaPlayer);
+
     mediaPlayer->setPlaylist(playlist);
 
     mediaPlayer->pause();
     videoWidget->show();
+
+    setGeometry(qApp->primaryScreen()->geometry());
+    videoWidget->resize(size());
+    lower();
+
+    connect(qApp->primaryScreen(), &QScreen::geometryChanged, [=] {
+        setGeometry(qApp->primaryScreen()->geometry());
+        videoWidget->resize(size());
+        lower();
+    });
 }
 
 void Wallpaper::setVideoFile(const QStringList &videolist, int volume, bool range)
