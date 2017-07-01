@@ -9,12 +9,16 @@ class Wallpaper : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Wallpaper(const QString path, QWidget *parent = 0);
-    void play();
+    explicit Wallpaper(QWidget *parent = 0);
+
+public slots:
+    void setVideoFile(const QStringList &videolist, int volume, bool range = false);
+    void clear();
 
 private:
     QVBoxLayout *mainlayout;
-    QMediaPlayer mediaPlayer;
+    QMediaPlayer *mediaPlayer;
+    QMediaPlaylist *playlist;
 };
 
 #endif // WALLPAPER_H
