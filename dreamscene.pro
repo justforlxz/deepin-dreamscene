@@ -7,11 +7,13 @@ TARGET = dde-wallpaper
 
 SOURCES += main.cpp \
     wallpaper.cpp \
-    dbuswallpaperservice.cpp
+    dbuswallpaperservice.cpp \
+    wallpapermask.cpp
 
 HEADERS += \
     wallpaper.h \
-    dbuswallpaperservice.h
+    dbuswallpaperservice.h \
+    wallpapermask.h
 
 RESOURCES +=
 

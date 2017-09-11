@@ -8,9 +8,37 @@
 #include <QScreen>
 #include <xcb/xcb.h>
 #include <xcb/xcb_ewmh.h>
+#include <QApplication>
+#include <QPainter>
+#include <QTimer>
+#include <QGraphicsOpacityEffect>
 
-Wallpaper::Wallpaper(QWidget *parent) : QWidget(parent)
+Wallpaper::Wallpaper(QWidget *parent)
+    : QWidget(parent)
+    , m_isVideo(false)
+    , m_index(0)
+    , m_adjustTimer(new QTimer(this))
+    , m_label(new WallpaperMask(this))
 {
+    m_adjustTimer->setSingleShot(true);
+    connect(m_adjustTimer, &QTimer::timeout, this, &Wallpaper::adjustGeometry);
+    m_adjustTimer->start();
+
+    m_label->show();
+
+    QGraphicsOpacityEffect *effect = new QGraphicsOpacityEffect(this);
+    m_label->setGraphicsEffect(effect);
+
+    redAnimation = new QPropertyAnimation(effect, "opacity", this);
+    redAnimation->setStartValue(1);
+    redAnimation->setEndValue(0);
+    redAnimation->setDuration(500);
+    redAnimation->setEasingCurve(QEasingCurve::Linear);
+
+    connect(redAnimation, &QPropertyAnimation::finished, this, [=] {
+        m_label->setPixmap(m_pixmap);
+    });
+
     setAttribute(Qt::WA_TranslucentBackground);
 
     QVBoxLayout *layout = new QVBoxLayout;
@@ -35,6 +63,7 @@ Wallpaper::Wallpaper(QWidget *parent) : QWidget(parent)
     mediaPlayer->pause();
 
     setGeometry(qApp->primaryScreen()->geometry());
+
     videoWidget->resize(size());
 
     connect(qApp->primaryScreen(), &QScreen::geometryChanged, [=] {
@@ -42,6 +71,20 @@ Wallpaper::Wallpaper(QWidget *parent) : QWidget(parent)
         videoWidget->resize(size());
         lower();
     });
+
+    m_folderWatcher = new QFileSystemWatcher(this);
+    m_folderWatcher->addPath(QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first() + "/Wallpapers/");
+    connect(m_folderWatcher, &QFileSystemWatcher::directoryChanged, this, &Wallpaper::onFolderChanged);
+
+    onFolderChanged();
+
+    QTimer *timer = new QTimer(this);
+    timer->setInterval(/*5 * 60 * */1000);
+    connect(timer, &QTimer::timeout, this, &Wallpaper::onTimerOut);
+    timer->start();
+    onTimerOut();
+
+    registerDesktop();
 }
 
 void Wallpaper::setVideoFile(const QStringList &videolist, int volume, bool range)
@@ -60,11 +103,10 @@ void Wallpaper::setVideoFile(const QStringList &videolist, int volume, bool rang
     else
         playlist->setPlaybackMode(QMediaPlaylist::Loop);
 
-    registerDesktop();
+//    registerDesktop();
 
     mediaPlayer->play();
     mediaPlayer->setVolume(volume);
-
 }
 
 void Wallpaper::clear()
@@ -72,6 +114,28 @@ void Wallpaper::clear()
     hide();
     mediaPlayer->stop();
     playlist->clear();
+}
+
+void Wallpaper::paintEvent(QPaintEvent *event)
+{
+    QWidget::paintEvent(event);
+
+    if (m_isVideo)
+        return;
+
+    if (m_pixmap.isNull())
+        return;
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
+
+    for (auto *s : qApp->screens()) {
+        const QRect tr = s->geometry();
+        const QPixmap pix = m_pixmap.scaled(s->size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+        const QRect pix_r = QRect((pix.width() - tr.width()) / 2, (pix.height() - tr.height()) / 2, tr.width(), tr.height());
+
+        painter.drawPixmap(s->geometry(), pix, pix_r);
+    }
 }
 
 void Wallpaper::registerDesktop()
@@ -86,4 +150,49 @@ void Wallpaper::registerDesktop()
 
     show();
     lower();
+}
+
+void Wallpaper::onTimerOut()
+{
+    // get wallpaper on user picture folder
+
+    if (m_picList.isEmpty())
+        return;
+
+    m_pixmap = QPixmap(QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first() + "/Wallpapers/" + m_picList.at(m_index));
+
+    if (m_index == m_picList.count() - 1)
+        m_index = 0;
+
+    m_index++;
+
+    update();
+
+
+    redAnimation->start();
+//    m_label->setPixmap(m_pixmap);
+}
+
+void Wallpaper::onFolderChanged()
+{
+    QDir dir(QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first() + "/Wallpapers/");
+    m_picList = dir.entryList();
+}
+
+void Wallpaper::adjustGeometry()
+{
+    const QPoint cp(QCursor::pos());
+    QRect r, pr;
+    for (const auto *s : qApp->screens())
+    {
+        const QRect sr = s->geometry();
+        if (sr.contains(cp))
+            pr = sr;
+
+        r = r.united(sr);
+    }
+
+    QWidget::setGeometry(r);
+
+    m_label->setGeometry(r);
 }
