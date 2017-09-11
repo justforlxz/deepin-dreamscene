@@ -79,7 +79,7 @@ Wallpaper::Wallpaper(QWidget *parent)
     onFolderChanged();
 
     QTimer *timer = new QTimer(this);
-    timer->setInterval(/*5 * 60 * */1000);
+    timer->setInterval(5 * 60 * 1000);
     connect(timer, &QTimer::timeout, this, &Wallpaper::onTimerOut);
     timer->start();
     onTimerOut();
