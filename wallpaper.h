@@ -18,8 +18,13 @@ public:
     explicit Wallpaper(QWidget *parent = 0);
 
 public slots:
-    void setVideoFile(const QStringList &videolist, int volume, bool range = false);
+    void setFolder(const QStringList &list, const bool isVideo);
+    void setVolume(const qint32 volume);
+    void setInterval(const qint32 interval);
     void clear();
+    void play();
+    void pause();
+    void stop();
 
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
@@ -29,14 +34,12 @@ private:
 
 private slots:
     void onTimerOut();
-    void onFolderChanged();
 
     void adjustGeometry();
 private:
     bool m_isVideo;
     QPixmap m_pixmap;
-    QStringList m_picList;
-    QFileSystemWatcher *m_folderWatcher;
+    QStringList m_folderList;
     QVBoxLayout *mainlayout;
     QMediaPlayer *mediaPlayer;
     QMediaPlaylist *playlist;
@@ -45,6 +48,7 @@ private:
     QTimer *m_adjustTimer;
     WallpaperMask *m_label;
     QPropertyAnimation *redAnimation;
+    QTimer *m_wallpaperTimer;
 };
 
 #endif // WALLPAPER_H

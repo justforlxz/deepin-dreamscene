@@ -2,7 +2,7 @@ TEMPLATE = app
 
 QT += gui x11extras widgets multimediawidgets multimedia dbus
 CONFIG += c++11 link_pkgconfig
-PKGCONFIG += xcb xcb-ewmh dtkwidget dtkbase
+PKGCONFIG += xcb xcb-ewmh dtkwidget
 TARGET = dde-wallpaper
 
 SOURCES += main.cpp \

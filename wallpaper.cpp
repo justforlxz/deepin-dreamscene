@@ -55,6 +55,7 @@ Wallpaper::Wallpaper(QWidget *parent)
 
     mediaPlayer = new QMediaPlayer;
     playlist = new QMediaPlaylist(mediaPlayer);
+    playlist->setPlaybackMode(QMediaPlaylist::Loop);
 
     videoWidget->setSource(mediaPlayer);
 
@@ -72,48 +73,93 @@ Wallpaper::Wallpaper(QWidget *parent)
         lower();
     });
 
-    m_folderWatcher = new QFileSystemWatcher(this);
-    m_folderWatcher->addPath(QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first() + "/Wallpapers/");
-    connect(m_folderWatcher, &QFileSystemWatcher::directoryChanged, this, &Wallpaper::onFolderChanged);
-
-    onFolderChanged();
-
-    QTimer *timer = new QTimer(this);
-    timer->setInterval(5 * 60 * 1000);
-    connect(timer, &QTimer::timeout, this, &Wallpaper::onTimerOut);
-    timer->start();
-    onTimerOut();
+    m_wallpaperTimer = new QTimer(this);
+    m_wallpaperTimer->setInterval(5 * 60 * 1000);
+    connect(m_wallpaperTimer, &QTimer::timeout, this, &Wallpaper::onTimerOut);
 
     registerDesktop();
 }
 
-void Wallpaper::setVideoFile(const QStringList &videolist, int volume, bool range)
+void Wallpaper::setFolder(const QStringList &list, const bool isVideo)
 {
-    playlist->clear();
+    m_isVideo = isVideo;
 
-    for (const QString &file : videolist) {
-        if (QFile::exists(file))
-            playlist->addMedia(QUrl("file://" +  file));
-        else
-            continue;
+    if (isVideo) {
+        playlist->clear();
+
+        for (const QString &file : list) {
+            if (QFile::exists(file))
+                playlist->addMedia(QUrl("file://" +  file));
+            else
+                continue;
+        }
+
+    } else {
+        m_folderList.clear();
+
+        for (const QString &path : list) {
+            QDir d(path);
+            if (!d.exists())
+                continue;
+
+            d.setFilter(QDir::Files | QDir::NoSymLinks);
+            QFileInfoList l = d.entryInfoList();
+
+            if (l.isEmpty())
+                continue;
+
+            for (const QFileInfo &info : l) {
+                QString suffix = info.suffix();
+                if(QString::compare(suffix, QString("png"), Qt::CaseInsensitive) == 0)
+                    m_folderList << info.absoluteFilePath();
+                if(QString::compare(suffix, QString("jpg"), Qt::CaseInsensitive) == 0)
+                    m_folderList << info.absoluteFilePath();
+                if(QString::compare(suffix, QString("jpeg"), Qt::CaseInsensitive) == 0)
+                    m_folderList << info.absoluteFilePath();
+            }
+        }
     }
+}
 
-    if (range)
-        playlist->setPlaybackMode(QMediaPlaylist::Random);
-    else
-        playlist->setPlaybackMode(QMediaPlaylist::Loop);
-
-//    registerDesktop();
-
-    mediaPlayer->play();
+void Wallpaper::setVolume(const qint32 volume)
+{
     mediaPlayer->setVolume(volume);
 }
 
 void Wallpaper::clear()
 {
     hide();
+    m_wallpaperTimer->stop();
     mediaPlayer->stop();
     playlist->clear();
+    m_folderList.clear();
+}
+
+void Wallpaper::play()
+{
+    if (m_isVideo)
+        mediaPlayer->play();
+    else
+        m_wallpaperTimer->start();
+}
+
+void Wallpaper::pause()
+{
+    if (m_isVideo)
+        mediaPlayer->pause();
+}
+
+void Wallpaper::stop()
+{
+    if (m_isVideo)
+        mediaPlayer->stop();
+    else
+        m_wallpaperTimer->stop();
+}
+
+void Wallpaper::setInterval(const qint32 interval)
+{
+    m_wallpaperTimer->setInterval(interval);
 }
 
 void Wallpaper::paintEvent(QPaintEvent *event)
@@ -154,29 +200,19 @@ void Wallpaper::registerDesktop()
 
 void Wallpaper::onTimerOut()
 {
-    // get wallpaper on user picture folder
-
-    if (m_picList.isEmpty())
+    if (m_folderList.isEmpty())
         return;
 
-    m_pixmap = QPixmap(QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first() + "/Wallpapers/" + m_picList.at(m_index));
+    m_pixmap = QPixmap(m_folderList.at(m_index));
 
-    if (m_index == m_picList.count() - 1)
+    if (m_index == m_folderList.count() - 1)
         m_index = 0;
 
     m_index++;
 
     update();
 
-
     redAnimation->start();
-//    m_label->setPixmap(m_pixmap);
-}
-
-void Wallpaper::onFolderChanged()
-{
-    QDir dir(QStandardPaths::standardLocations(QStandardPaths::PicturesLocation).first() + "/Wallpapers/");
-    m_picList = dir.entryList();
 }
 
 void Wallpaper::adjustGeometry()

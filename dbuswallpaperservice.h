@@ -16,8 +16,13 @@ public:
     inline Wallpaper *parent() const;
 
 public slots:
-    void setVideoFile(const QStringList &videolist, int volume = 0, bool range = false);
+    void setFolder(const QStringList &list, const bool isVideo);
+    void setVolume(const qint32 volume);
+    void setInterval(const qint32 interval);
     void clear();
+    void play();
+    void pause();
+    void stop();
 
 private:
     Wallpaper *m_parent;
