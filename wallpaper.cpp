@@ -11,6 +11,7 @@
 #include <QPainter>
 #include <QTimer>
 #include <QGraphicsOpacityEffect>
+#include <QDesktopWidget>
 
 Wallpaper::Wallpaper(QWidget *parent)
     : QWidget(parent)
@@ -49,6 +50,8 @@ Wallpaper::Wallpaper(QWidget *parent)
     m_wallpaperTimer->setInterval(5 * 60 * 1000);
     connect(m_wallpaperTimer, &QTimer::timeout, this, &Wallpaper::onTimerOut);
 
+    setGeometry(qApp->primaryScreen()->geometry());
+
     registerDesktop();
 
     m_mpv = new MpvWidget(this);
@@ -58,6 +61,15 @@ Wallpaper::Wallpaper(QWidget *parent)
     m_mpv->hide();
 
     m_mpv->setProperty("loop", true);
+
+    QDesktopWidget *desktopwidget = qApp->desktop();
+
+    connect(desktopwidget, &QDesktopWidget::primaryScreenChanged, this, [=] {
+        const QRect &rec = desktopwidget->screenGeometry(desktopwidget->primaryScreen());
+        setGeometry(rec);
+        m_mpv->setGeometry(rec);
+        m_label->setGeometry(rec);
+    });
 }
 
 void Wallpaper::setFolder(const QStringList &list, const bool isVideo)
@@ -206,4 +218,5 @@ void Wallpaper::adjustGeometry()
     QWidget::setGeometry(r);
 
     m_label->setGeometry(r);
+    m_mpv->setGeometry(r);
 }
