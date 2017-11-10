@@ -1,4 +1,4 @@
-Source: mkacg-dreamescene
+Source: deepin-dreamescene
 Section: base
 Priority: optional
 Maintainer: kirigaya <kirigaya@mkacg.com>
@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 9),pkg-config, dpkg-dev, qt5-qmake, qtbase5-dev, li
 Standards-Version: 0.1-1
 Homepage: http://blog.mkacg.com
 
-Package: mkacg-dreamescene
+Package: deepin-dreamescene
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: video wallpaper for deepin.
