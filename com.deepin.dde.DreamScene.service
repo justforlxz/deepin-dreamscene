@@ -1,3 +1,3 @@
 [D-BUS Service]
-Name=com.deepin.dde.Wallpaper
-Exec=/usr/bin/dde-wallpaper
+Name=com.deepin.dde.DreamScene
+Exec=/usr/bin/deepin-dreamscene
