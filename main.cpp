@@ -15,16 +15,16 @@ int main(int argc, char *argv[])
 
     setlocale(LC_NUMERIC, "C");
 
-    if (a.setSingleInstance("dde-wallpaper")) {
-        a.setApplicationName(QObject::tr("Dream Scene"));
+    if (a.setSingleInstance("deepin-dreamscene")) {
+        a.setApplicationName(QObject::tr("Deepin DreamScene"));
         a.setApplicationVersion("Version 0.1");
 
         Wallpaper *w = new Wallpaper;
         DBusWallpaperService *dbusInter = new DBusWallpaperService(w);
         Q_UNUSED(dbusInter);
 
-        QDBusConnection::sessionBus().registerService("com.deepin.dde.Wallpaper");
-        QDBusConnection::sessionBus().registerObject("/com/deepin/dde/Wallpaper", "com.deepin.dde.Wallpaper", w);
+        QDBusConnection::sessionBus().registerService("com.deepin.dde.DreamScene");
+        QDBusConnection::sessionBus().registerObject("/com/deepin/dde/DreamScene", "com.deepin.dde.DreamScene", w);
 
         QString envName("DDE_SESSION_PROCESS_COOKIE_ID");
 

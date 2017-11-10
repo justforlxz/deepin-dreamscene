@@ -9,7 +9,7 @@ class Wallpaper;
 class DBusWallpaperService : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "com.deepin.dde.Wallpaper")
+    Q_CLASSINFO("D-Bus Interface", "com.deepin.dde.DreamScene")
 public:
     explicit DBusWallpaperService(Wallpaper *parent);
 
