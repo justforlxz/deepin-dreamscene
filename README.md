@@ -79,7 +79,7 @@ replace XXX to wallpaper folder, suuport list, bug only support *.jpg and *.png.
 and, run play
 
 ```
-dbus-send --session --print-reply --dest=com.deepin.dde.Wallpaper /com/deepin/dde/Wallpaper com.deepin.dde.Wallpaper.play
+dbus-send --session --print-reply --dest=com.deepin.dde.DreamScene /com/deepin/dde/DreamScene com.deepin.dde.DreamScene.play
 ```
 
 ## License
