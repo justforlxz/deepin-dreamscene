@@ -54,6 +54,34 @@ You may also find these channels useful if you encounter any other issues:
 
 * [deepin community](https://bbs.deepin.org) Topbar is also the community software that you can post for help.
 
+## How to use
+
+first, find video file
+
+```
+dbus-send --session --print-reply --dest=com.deepin.dde.DreamScene /com/deepin/dde/DreamScene com.deepin.dde.DreamScene.setFolder array:string:"XXX" boolean:true
+```
+
+replace XXX to video file, only support one file.
+
+if you want use wallpaper mode, find wallpaper folder
+
+```
+dbus-send --session --print-reply --dest=com.deepin.dde.DreamScene /com/deepin/dde/DreamScene com.deepin.dde.DreamScene.setFolder array:string:"XXX" boolean:false
+```
+or
+```
+dbus-send --session --print-reply --dest=com.deepin.dde.DreamScene /com/deepin/dde/DreamScene com.deepin.dde.DreamScene.setFolder array:string:"XXX","XXX" boolean:false
+```
+
+replace XXX to wallpaper folder, suuport list, bug only support *.jpg and *.png.
+
+and, run play
+
+```
+dbus-send --session --print-reply --dest=com.deepin.dde.Wallpaper /com/deepin/dde/Wallpaper com.deepin.dde.Wallpaper.play
+```
+
 ## License
 
 DreamScene is licensed under [GPLv3](LICENSE).
