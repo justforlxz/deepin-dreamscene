@@ -1,9 +1,7 @@
 #include <QObject>
 #include <DApplication>
-
 #include "wallpaper.h"
 #include "dbuswallpaperservice.h"
-#include "settings.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -11,12 +9,9 @@ int main(int argc, char *argv[])
 {
     DApplication::loadDXcbPlugin();
     DApplication a(argc, argv);
-    a.setTheme("light");
-
-    setlocale(LC_NUMERIC, "C");
 
     if (a.setSingleInstance("dde-wallpaper")) {
-        a.setApplicationName(QObject::tr("Dream Scene"));
+        a.setApplicationName("dde-wallpaper");
         a.setApplicationVersion("Version 0.1");
 
         Wallpaper *w = new Wallpaper;
@@ -38,11 +33,6 @@ int main(int argc, char *argv[])
                                  QDBusConnection::sessionBus());
             iface.asyncCall("Register", QString(cookie));
         }
-
-#ifdef QT_DEBUG
-        Settings *s = new Settings;
-        s->show();
-#endif
     }
 
     return a.exec();

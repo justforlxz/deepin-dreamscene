@@ -2,12 +2,14 @@
 #define WALLPAPER_H
 
 #include "wallpapermask.h"
-#include "mpvwidget.h"
-
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QMediaPlayer>
+#include <DVideoWidget>
 #include <QFileSystemWatcher>
 #include <QPropertyAnimation>
+
+DWIDGET_USE_NAMESPACE
 
 class Wallpaper : public QWidget
 {
@@ -39,15 +41,14 @@ private:
     QPixmap m_pixmap;
     QStringList m_folderList;
     QVBoxLayout *mainlayout;
+    QMediaPlayer *mediaPlayer;
+    QMediaPlaylist *playlist;
+    DVideoWidget *videoWidget;
     int m_index;
     QTimer *m_adjustTimer;
     WallpaperMask *m_label;
     QPropertyAnimation *redAnimation;
     QTimer *m_wallpaperTimer;
-    MpvWidget *m_mpv;
-
-    QWidget *mpv_container;
-    mpv_handle *mpv;
 };
 
 #endif // WALLPAPER_H

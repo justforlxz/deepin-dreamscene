@@ -1,7 +1,8 @@
 #include "wallpaper.h"
-
+#include <QVideoWidget>
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <QMediaPlaylist>
 #include <QApplication>
 #include <QtX11Extras/QX11Info>
 #include <QScreen>
@@ -45,19 +46,38 @@ Wallpaper::Wallpaper(QWidget *parent)
     layout->setMargin(0);
     setLayout(layout);
 
+    videoWidget = new DVideoWidget;
+    layout->addWidget(videoWidget);
+
+    videoWidget->setAttribute(Qt::WA_TranslucentBackground);
+
+    videoWidget->setAspectRatioMode(Qt::KeepAspectRatioByExpanding);
+
+    mediaPlayer = new QMediaPlayer;
+    playlist = new QMediaPlaylist(mediaPlayer);
+    playlist->setPlaybackMode(QMediaPlaylist::Loop);
+
+    videoWidget->setSource(mediaPlayer);
+
+    mediaPlayer->setPlaylist(playlist);
+
+    mediaPlayer->pause();
+
+    setGeometry(qApp->primaryScreen()->geometry());
+
+    videoWidget->resize(size());
+
+    connect(qApp->primaryScreen(), &QScreen::geometryChanged, [=] {
+        setGeometry(qApp->primaryScreen()->geometry());
+        videoWidget->resize(size());
+        lower();
+    });
+
     m_wallpaperTimer = new QTimer(this);
     m_wallpaperTimer->setInterval(5 * 60 * 1000);
     connect(m_wallpaperTimer, &QTimer::timeout, this, &Wallpaper::onTimerOut);
 
     registerDesktop();
-
-    m_mpv = new MpvWidget(this);
-
-    m_mpv->setGeometry(geometry());
-    layout->addWidget(m_mpv);
-    m_mpv->hide();
-
-    m_mpv->setProperty("loop", true);
 }
 
 void Wallpaper::setFolder(const QStringList &list, const bool isVideo)
@@ -65,9 +85,14 @@ void Wallpaper::setFolder(const QStringList &list, const bool isVideo)
     m_isVideo = isVideo;
 
     if (isVideo) {
+        playlist->clear();
 
-        m_mpv->command(QStringList() << "loadfile" << list.first());
-        m_mpv->setProperty("pause", true);
+        for (const QString &file : list) {
+            if (QFile::exists(file))
+                playlist->addMedia(QUrl("file://" +  file));
+            else
+                continue;
+        }
 
     } else {
         m_folderList.clear();
@@ -98,36 +123,36 @@ void Wallpaper::setFolder(const QStringList &list, const bool isVideo)
 
 void Wallpaper::setVolume(const qint32 volume)
 {
-    m_mpv->setProperty("volume", volume);
+    mediaPlayer->setVolume(volume);
 }
 
 void Wallpaper::clear()
 {
     hide();
     m_wallpaperTimer->stop();
+    mediaPlayer->stop();
+    playlist->clear();
     m_folderList.clear();
 }
 
 void Wallpaper::play()
 {
-    if (m_isVideo) {
-        m_mpv->setProperty("pause", false);
-        m_mpv->show();
-    } else {
+    if (m_isVideo)
+        mediaPlayer->play();
+    else
         m_wallpaperTimer->start();
-    }
 }
 
 void Wallpaper::pause()
 {
     if (m_isVideo)
-        m_mpv->setProperty("pause", true);
+        mediaPlayer->pause();
 }
 
 void Wallpaper::stop()
 {
     if (m_isVideo)
-        m_mpv->setProperty("stop", true);
+        mediaPlayer->stop();
     else
         m_wallpaperTimer->stop();
 }

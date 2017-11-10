@@ -1,23 +1,19 @@
 TEMPLATE = app
 
-QT += gui x11extras widgets dbus
+QT += gui x11extras widgets multimediawidgets multimedia dbus
 CONFIG += c++11 link_pkgconfig
-PKGCONFIG += xcb-ewmh dtkwidget mpv
+PKGCONFIG += xcb xcb-ewmh dtkwidget
 TARGET = dde-wallpaper
 
 SOURCES += main.cpp \
     wallpaper.cpp \
     dbuswallpaperservice.cpp \
-    wallpapermask.cpp \
-    mpvwidget.cpp \
-    settings.cpp
+    wallpapermask.cpp
 
 HEADERS += \
     wallpaper.h \
     dbuswallpaperservice.h \
-    wallpapermask.h \
-    mpvwidget.h \
-    settings.h
+    wallpapermask.h
 
 RESOURCES +=
 
