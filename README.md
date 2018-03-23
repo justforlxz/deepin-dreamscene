@@ -6,7 +6,7 @@ This is a project that I have a whim to help improve my ability to write code.
 
 ### Build dependencies
 
-* qmake (>= 5.3)
+* qmake (>= 5.6)
 * [deepin-tool-kit](https://github.com/linuxdeepin/deepin-tool-kit) (developer package)
 * xcb-ewmh (developer package)
 * libmpv (developer package)
@@ -59,27 +59,34 @@ You may also find these channels useful if you encounter any other issues:
 first, find video file
 
 ```
-dbus-send --session --print-reply --dest=com.deepin.dde.DreamScene /com/deepin/dde/DreamScene com.deepin.dde.DreamScene.setFolder array:string:"XXX" boolean:true
+qdbus --literal com.deepin.dde.DreamScene /com/deepin/dde/DreamScene com.deepin.dde.DreamScene.setFile FilePath
 ```
 
 replace XXX to video file, only support one file.
 
-if you want use wallpaper mode, find wallpaper folder
-
-```
-dbus-send --session --print-reply --dest=com.deepin.dde.DreamScene /com/deepin/dde/DreamScene com.deepin.dde.DreamScene.setFolder array:string:"XXX" boolean:false
-```
-or
-```
-dbus-send --session --print-reply --dest=com.deepin.dde.DreamScene /com/deepin/dde/DreamScene com.deepin.dde.DreamScene.setFolder array:string:"XXX","XXX" boolean:false
-```
-
-replace XXX to wallpaper folder, suuport list, bug only support *.jpg and *.png.
 
 and, run play
 
 ```
-dbus-send --session --print-reply --dest=com.deepin.dde.DreamScene /com/deepin/dde/DreamScene com.deepin.dde.DreamScene.play
+qdbus --literal com.deepin.dde.DreamScene /com/deepin/dde/DreamScene com.deepin.dde.DreamScene.play
+```
+
+pause
+
+```
+qdbus --literal com.deepin.dde.DreamScene /com/deepin/dde/DreamScene com.deepin.dde.DreamScene.pause
+```
+
+stop
+
+```
+qdbus --literal com.deepin.dde.DreamScene /com/deepin/dde/DreamScene com.deepin.dde.DreamScene.stop
+```
+
+clear
+
+```
+qdbus --literal com.deepin.dde.DreamScene /com/deepin/dde/DreamScene com.deepin.dde.DreamScene.clear
 ```
 
 ## License
