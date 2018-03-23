@@ -21,6 +21,7 @@
 #include <stdexcept>
 #include <QtGui/QOpenGLContext>
 #include <QtCore/QMetaObject>
+#include <QDebug>
 
 static void wakeup(void *ctx)
 {

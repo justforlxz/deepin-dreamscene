@@ -8,14 +8,12 @@ TARGET = deepin-dreamscene
 SOURCES += main.cpp \
     wallpaper.cpp \
     dbuswallpaperservice.cpp \
-    wallpapermask.cpp \
     mpvwidget.cpp \
     settings.cpp
 
 HEADERS += \
     wallpaper.h \
     dbuswallpaperservice.h \
-    wallpapermask.h \
     mpvwidget.h \
     settings.h
 

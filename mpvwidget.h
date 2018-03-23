@@ -24,7 +24,7 @@
 #include <mpv/opengl_cb.h>
 #include <mpv/qthelper.hpp>
 
-class MpvWidget Q_DECL_FINAL: public QOpenGLWidget
+class MpvWidget : public QOpenGLWidget
 {
     Q_OBJECT
 public:

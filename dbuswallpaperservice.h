@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QtDBus/QtDBus>
-#include "wallpaper.h"
 
 class Wallpaper;
 class DBusWallpaperService : public QDBusAbstractAdaptor
@@ -16,9 +15,8 @@ public:
     inline Wallpaper *parent() const;
 
 public slots:
-    void setFolder(const QStringList &list, const bool isVideo);
+    void setFile(const QString &path);
     void setVolume(const qint32 volume);
-    void setInterval(const qint32 interval);
     void clear();
     void play();
     void pause();

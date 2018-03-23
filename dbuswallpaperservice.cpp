@@ -13,19 +13,14 @@ Wallpaper *DBusWallpaperService::parent() const
     return m_parent;
 }
 
-void DBusWallpaperService::setFolder(const QStringList &list, const bool isVideo)
+void DBusWallpaperService::setFile(const QString &path)
 {
-    m_parent->setFolder(list, isVideo);
+    m_parent->setFile(path);
 }
 
 void DBusWallpaperService::setVolume(const qint32 volume)
 {
     m_parent->setVolume(volume);
-}
-
-void DBusWallpaperService::setInterval(const qint32 interval)
-{
-    m_parent->setInterval(interval);
 }
 
 void DBusWallpaperService::clear()
