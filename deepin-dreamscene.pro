@@ -1,23 +1,18 @@
 TEMPLATE = app
 
-QT += gui x11extras widgets dbus
+QT += gui x11extras widgets dbus qml
 CONFIG += c++11 link_pkgconfig
-PKGCONFIG += xcb-ewmh dtkwidget mpv
+PKGCONFIG += xcb-ewmh dtkwidget
 TARGET = deepin-dreamscene
 
 SOURCES += main.cpp \
-    wallpaper.cpp \
-    dbuswallpaperservice.cpp \
-    mpvwidget.cpp \
-    settings.cpp
+    packagemanager.cpp
 
 HEADERS += \
-    wallpaper.h \
-    dbuswallpaperservice.h \
-    mpvwidget.h \
-    settings.h
+    packagemanager.h
 
-RESOURCES +=
+RESOURCES += \
+    deepin-dreamscene.qrc
 
 target.path = /usr/bin/
 
