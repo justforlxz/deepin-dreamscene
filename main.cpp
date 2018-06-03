@@ -1,6 +1,7 @@
 #include <QObject>
 #include <DApplication>
 
+#include "backgroundview.h"
 #include "packagemanager.h"
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
@@ -15,6 +16,10 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     PackageManager packageManager;
+
+    BackgroundView view;
+    view.show();
+    view.lower();
 
     engine.rootContext()->setContextProperty("packageManager", &packageManager);
     engine.load("qrc:/window.qml");

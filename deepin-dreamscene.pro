@@ -6,10 +6,12 @@ PKGCONFIG += xcb-ewmh dtkwidget
 TARGET = deepin-dreamscene
 
 SOURCES += main.cpp \
-    packagemanager.cpp
+    packagemanager.cpp \
+    backgroundview.cpp
 
 HEADERS += \
-    packagemanager.h
+    packagemanager.h \
+    backgroundview.h
 
 RESOURCES += \
     deepin-dreamscene.qrc
