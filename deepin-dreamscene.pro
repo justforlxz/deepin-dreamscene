@@ -11,7 +11,9 @@ SOURCES += main.cpp \
 
 HEADERS += \
     packagemanager.h \
-    backgroundview.h
+    backgroundview.h \
+    plugininterface.h \
+    proxyinterface.h
 
 RESOURCES += \
     deepin-dreamscene.qrc
