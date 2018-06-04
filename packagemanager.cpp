@@ -28,7 +28,9 @@
 
  */
 
-PackageManager::PackageManager(QObject *parent) : QObject(parent)
+PackageManager::PackageManager(QObject *parent)
+    : QObject(parent)
+    , m_currentPluginLoader(nullptr)
 {
     refreshList();
 }

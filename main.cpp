@@ -28,6 +28,9 @@ int main(int argc, char *argv[])
     QObject::connect(rootObject, SIGNAL(activated(QString)),
                       &packageManager, SLOT(setActivate(QString)));
 
+    QObject::connect(&packageManager, &PackageManager::requestSetItem,
+                     &view, &BackgroundView::setContent);
+
     return a.exec();
 }
 
