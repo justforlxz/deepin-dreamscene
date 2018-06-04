@@ -26,4 +26,7 @@ DISTFILES += \
 dbus_service.files += com.deepin.dde.DreamScene.service
 dbus_service.path = /usr/share/dbus-1/services
 
-INSTALLS += target dbus_service
+include_file.files += plugininterface.h proxyinterface.h
+include_file.path = /usr/include/deepin-dreamscene/
+
+INSTALLS += target dbus_service include_file

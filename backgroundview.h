@@ -2,6 +2,7 @@
 #define BACKGROUNDVIEW_H
 
 #include <QWidget>
+#include <QHBoxLayout>
 
 class BackgroundView : public QWidget
 {
@@ -12,9 +13,14 @@ public:
 signals:
 
 public slots:
+    void setContent(QWidget * const content);
 
 private:
     void updateGeometry();
+
+private:
+    QHBoxLayout *m_layout;
+    QWidget *m_lastWidget;
 };
 
 #endif // BACKGROUNDVIEW_H

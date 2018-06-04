@@ -36,7 +36,6 @@ ApplicationWindow {
         show();
 
         for (var i in packageManager.packageList) {
-            console.debug(JSON.parse(packageManager.packageList[i]))
             listView.model.append(JSON.parse(packageManager.packageList[i]))
             listView.model.append(JSON.parse(packageManager.packageList[i]))
         }
