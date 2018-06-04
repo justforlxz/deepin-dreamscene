@@ -70,7 +70,6 @@ ApplicationWindow {
 
         for (var i in packageManager.packageList) {
             listView.model.append(JSON.parse(packageManager.packageList[i]))
-            listView.model.append(JSON.parse(packageManager.packageList[i]))
         }
 
         // Binding signal
