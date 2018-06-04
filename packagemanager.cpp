@@ -1,4 +1,5 @@
 #include "packagemanager.h"
+#include "plugininterface.h"
 
 #include <QDir>
 #include <QFile>
@@ -6,6 +7,8 @@
 #include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QLibrary>
+#include <QPluginLoader>
 
 /*
  package.json
@@ -53,7 +56,7 @@ void PackageManager::setActivate(const QString &packageID)
 {
     for (const PackageInfo &info : m_packageInfos) {
         if (info.PackageID == packageID) {
-
+            loadPlugin(info.Index);
             break;
         }
     }
@@ -77,4 +80,32 @@ void PackageManager::loadConfig(const QString &folder)
         m_packageInfos << info;
         qDebug() << info.json();
     }
+}
+
+void PackageManager::loadPlugin(const QString &path)
+{
+    if (!QLibrary::isLibrary(path)) return;
+
+    if (m_currentPluginLoader) {
+        m_currentPluginLoader->unload();
+        m_currentPluginLoader->deleteLater();
+    }
+
+    m_currentPluginLoader = new QPluginLoader(path, this);
+
+    qDebug() << m_currentPluginLoader->metaData();
+    PluginInterface *interface = qobject_cast<PluginInterface*>(m_currentPluginLoader->instance());
+    if (!interface) {
+        qWarning() << m_currentPluginLoader->errorString();
+        m_currentPluginLoader->unload();
+        m_currentPluginLoader->deleteLater();
+        m_currentPluginLoader = nullptr;
+        return;
+    }
+    else {
+        qDebug() << "get plugin interface: " << interface;
+    }
+
+    interface->init(this);
+    emit requestSetItem(interface->contentWidget());
 }

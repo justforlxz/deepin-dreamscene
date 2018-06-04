@@ -1,6 +1,8 @@
 #ifndef PACKAGEMANAGER_H
 #define PACKAGEMANAGER_H
 
+#include "proxyinterface.h"
+
 #include <QObject>
 #include <QStringList>
 #include <QJsonObject>
@@ -73,7 +75,8 @@ struct PackageInfo
     AuthorInfo Author;
 };
 
-class PackageManager : public QObject
+class QPluginLoader;
+class PackageManager : public QObject, ProxyInterface
 {
     Q_OBJECT
     Q_PROPERTY(QStringList packageList READ packageList NOTIFY packageListChanged)
@@ -90,13 +93,16 @@ public slots:
 
 signals:
     void packageListChanged(QStringList packageList);
+    void requestSetItem(QWidget * const content);
 
 private:
     void loadConfig(const QString &folder);
+    void loadPlugin(const QString &path);
 
 private:
     QStringList m_packageList;
     QList<PackageInfo> m_packageInfos;
+    QPluginLoader *m_currentPluginLoader;
 };
 
 #endif // PACKAGEMANAGER_H
