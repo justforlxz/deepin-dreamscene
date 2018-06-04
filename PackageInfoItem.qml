@@ -2,9 +2,7 @@ import QtQuick 2.0
 
 Item {
     width: 100
-    height: 150
-
-
+    height: 100
 
     Column {
         id: row1

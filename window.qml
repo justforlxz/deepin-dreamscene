@@ -21,16 +21,23 @@ ApplicationWindow {
                     id: listView
                     x: 21
                     y: 37
-                    width: 556
-                    height: 501
+                    width: 550
+                    height: 500
                     spacing: 10
                     orientation: ListView.Horizontal
-                    delegate: PackageInfoItem {}
+                    delegate: PackageInfoItem {
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: listView.currentIndex = index
+                        }
+                    }
+
                     highlight: Rectangle {
                         color: "lightsteelblue"
-                        width: 100
-                        height: 150
-
+                        width: listView.currentItem.width
+                        height: listView.currentItem.height
+                        x: listView.currentItem.x
+                        y: listView.currrentItem.y
                     }
 
                     highlightFollowsCurrentItem: false
