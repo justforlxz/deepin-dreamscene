@@ -37,7 +37,7 @@ ApplicationWindow {
                         width: listView.currentItem.width
                         height: listView.currentItem.height
                         x: listView.currentItem.x
-                        y: listView.currrentItem.y
+                        y: listView.currentItem.y
                     }
 
                     highlightFollowsCurrentItem: false
@@ -77,7 +77,7 @@ ApplicationWindow {
     }
 
     function setItem() {
-        console.log(listView.model.get(listView.model.currentIndex).PackageID);
-        activated(listView.model.get(listView.model.currentIndex).PackageID)
+        console.log(listView.model.get(listView.currentIndex).PackageID);
+        activated(listView.model.get(listView.currentIndex).PackageID)
     }
 }
