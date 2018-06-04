@@ -24,6 +24,10 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("packageManager", &packageManager);
     engine.load("qrc:/window.qml");
 
+    QObject *rootObject = engine.rootObjects().first();
+    QObject::connect(rootObject, SIGNAL(activated(QString)),
+                      &packageManager, SLOT(setActivate(QString)));
+
     return a.exec();
 }
 

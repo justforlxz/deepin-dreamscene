@@ -3,6 +3,8 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 RowLayout {
+    signal activated()
+
     Button {
         id: load
         text: qsTr("Load")
@@ -14,5 +16,6 @@ RowLayout {
     Button {
         id: apply
         text: qsTr("Apply")
+        onPressed: activated()
     }
 }

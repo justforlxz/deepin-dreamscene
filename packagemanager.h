@@ -50,6 +50,10 @@ struct PackageInfo
         Author = AuthorInfo(obj["Author"].toObject());
     }
 
+    bool operator ==(const PackageInfo &info) {
+        return info.PackageID == PackageID;
+    }
+
     const QString json() {
 
         QString json;
@@ -81,6 +85,9 @@ public:
 
     void refreshList();
 
+public slots:
+    void setActivate(const QString &packageID);
+
 signals:
     void packageListChanged(QStringList packageList);
 
@@ -89,6 +96,7 @@ private:
 
 private:
     QStringList m_packageList;
+    QList<PackageInfo> m_packageInfos;
 };
 
 #endif // PACKAGEMANAGER_H

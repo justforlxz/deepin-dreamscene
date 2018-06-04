@@ -6,6 +6,8 @@ ApplicationWindow {
     width: 750
     height: 600
 
+    signal activated(string uuid)
+
     ColumnLayout {
         anchors.fill: parent
 
@@ -50,7 +52,9 @@ ApplicationWindow {
             }
         }
 
-        BottomItem {}
+        BottomItem {
+            id: btns
+        }
     }
 
 
@@ -61,5 +65,13 @@ ApplicationWindow {
             listView.model.append(JSON.parse(packageManager.packageList[i]))
             listView.model.append(JSON.parse(packageManager.packageList[i]))
         }
+
+        // Binding signal
+        btns.activated.connect(setItem);
+    }
+
+    function setItem() {
+        console.log(listView.model.get(listView.model.currentIndex).PackageID);
+        activated(listView.model.get(listView.model.currentIndex).PackageID)
     }
 }

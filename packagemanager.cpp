@@ -49,6 +49,16 @@ void PackageManager::refreshList()
     }
 }
 
+void PackageManager::setActivate(const QString &packageID)
+{
+    for (const PackageInfo &info : m_packageInfos) {
+        if (info.PackageID == packageID) {
+
+            break;
+        }
+    }
+}
+
 void PackageManager::loadConfig(const QString &folder)
 {
     QFile file(folder + "/package.json");
@@ -58,9 +68,13 @@ void PackageManager::loadConfig(const QString &folder)
         // need check json vaild
         PackageInfo info(source);
 
+        if (m_packageInfos.contains(info)) return;
+
         info.Author.PreviewImage = folder + QDir::separator() + info.Author.PreviewImage;
+        info.Index = folder + QDir::separator() + info.Index;
 
         m_packageList << info.json();
+        m_packageInfos << info;
         qDebug() << info.json();
     }
 }
