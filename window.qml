@@ -16,7 +16,7 @@ Item {
             id: mainLayout
             spacing: 6
 
-            Rectangle {
+            Item {
                 Layout.fillWidth: true
                 ListView {
                     id: listView
