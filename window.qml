@@ -1,36 +1,58 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.4
+import QtQuick.Layouts 1.3
 
 ApplicationWindow {
     width: 750
     height: 600
 
-    Item {
+    ColumnLayout {
         anchors.fill: parent
-        ListView {
-            id: listView
-            x: 21
-            y: 37
-            width: 556
-            height: 501
-            spacing: 10
-            orientation: ListView.Horizontal
-            delegate: PackageInfoItem {}
-            highlight: Rectangle {
-                color: "lightsteelblue"
-                width: 100
-                height: 150
 
+        RowLayout {
+            id: mainLayout
+            spacing: 6
+
+            Rectangle {
+                Layout.fillWidth: true
+                ListView {
+                    id: listView
+                    x: 21
+                    y: 37
+                    width: 556
+                    height: 501
+                    spacing: 10
+                    orientation: ListView.Horizontal
+                    delegate: PackageInfoItem {}
+                    highlight: Rectangle {
+                        color: "lightsteelblue"
+                        width: 100
+                        height: 150
+
+                    }
+
+                    highlightFollowsCurrentItem: false
+
+                    model: ListModel {}
+
+                    onCurrentIndexChanged: {
+                        authorInfoItem.setValue(model.get(currentIndex))
+                    }
+                }
             }
-            highlightFollowsCurrentItem: false
 
-            model: ListModel {}
-
-            onCurrentIndexChanged: {
-                console.log(currentIndex)
+            Item {
+                Layout.minimumWidth: 200
+                Layout.alignment: Qt.AlignCenter
+                AuthorInfoItem {
+                    id: authorInfoItem
+                }
             }
         }
+
+        BottomItem {}
     }
+
 
     Component.onCompleted: {
         show();

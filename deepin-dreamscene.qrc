@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>window.qml</file>
         <file>PackageInfoItem.qml</file>
+        <file>AuthorInfoItem.qml</file>
+        <file>BottomItem.qml</file>
     </qresource>
 </RCC>
