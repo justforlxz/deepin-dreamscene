@@ -1,19 +1,21 @@
 TEMPLATE = app
 
-QT += gui x11extras widgets dbus qml
+QT += gui x11extras widgets dbus qml quickwidgets
 CONFIG += c++11 link_pkgconfig
 PKGCONFIG += xcb-ewmh dtkwidget
 TARGET = deepin-dreamscene
 
 SOURCES += main.cpp \
     packagemanager.cpp \
-    backgroundview.cpp
+    backgroundview.cpp \
+    mainwindow.cpp
 
 HEADERS += \
     packagemanager.h \
     backgroundview.h \
     plugininterface.h \
-    proxyinterface.h
+    proxyinterface.h \
+    mainwindow.h
 
 RESOURCES += \
     deepin-dreamscene.qrc

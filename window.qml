@@ -2,7 +2,8 @@ import QtQuick 2.0
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.3
 
-ApplicationWindow {
+Item {
+    id: root
     width: 750
     height: 600
 
@@ -66,8 +67,6 @@ ApplicationWindow {
 
 
     Component.onCompleted: {
-        show();
-
         for (var i in packageManager.packageList) {
             listView.model.append(JSON.parse(packageManager.packageList[i]))
         }

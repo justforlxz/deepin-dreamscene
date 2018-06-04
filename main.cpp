@@ -1,10 +1,8 @@
 #include <QObject>
 #include <DApplication>
+#include <DWidgetUtil>
 
-#include "backgroundview.h"
-#include "packagemanager.h"
-#include <QQmlApplicationEngine>
-#include <QQmlContext>
+#include "mainwindow.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -14,22 +12,9 @@ int main(int argc, char *argv[])
     DApplication a(argc, argv);
     a.setTheme("light");
 
-    QQmlApplicationEngine engine;
-    PackageManager packageManager;
-
-    BackgroundView view;
-    view.show();
-    view.lower();
-
-    engine.rootContext()->setContextProperty("packageManager", &packageManager);
-    engine.load("qrc:/window.qml");
-
-    QObject *rootObject = engine.rootObjects().first();
-    QObject::connect(rootObject, SIGNAL(activated(QString)),
-                      &packageManager, SLOT(setActivate(QString)));
-
-    QObject::connect(&packageManager, &PackageManager::requestSetItem,
-                     &view, &BackgroundView::setContent);
+    MainWindow mw;
+    mw.show();
+    moveToCenter(&mw);
 
     return a.exec();
 }
