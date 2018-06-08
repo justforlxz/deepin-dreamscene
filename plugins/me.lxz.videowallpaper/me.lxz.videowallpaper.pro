@@ -28,11 +28,13 @@ include(../../interfaces/interfaces.pri)
 
 SOURCES += \
         wallpaper.cpp \
-    wallpaperplugins.cpp
+    wallpaperplugins.cpp \
+    settings.cpp
 
 HEADERS += \
         wallpaper.h \
-    wallpaperplugins.h
+    wallpaperplugins.h \
+    settings.h
 
 target.path = $${PREFIX}/lib/deepin-dreamscene/plugins/me.lxz.videowallpaper/
 

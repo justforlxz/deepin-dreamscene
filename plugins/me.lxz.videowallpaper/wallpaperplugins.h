@@ -15,10 +15,11 @@ public:
     explicit WallpaperPlugins(QObject *parent = nullptr);
 
 protected:
-    void init(ProxyInterface * const inter);
-    QWidget *contentWidget();
-    const QString name() const;
-    const QString version() const;
+    void init(ProxyInterface * const inter) Q_DECL_OVERRIDE;
+    QWidget *contentWidget() Q_DECL_OVERRIDE;
+    const QString name() const Q_DECL_OVERRIDE;
+    const QString version() const Q_DECL_OVERRIDE;
+    void showSetting() Q_DECL_OVERRIDE;
 
 private:
     Wallpaper *m_wallpaper;

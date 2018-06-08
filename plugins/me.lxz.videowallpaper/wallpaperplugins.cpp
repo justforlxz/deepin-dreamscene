@@ -24,3 +24,8 @@ const QString WallpaperPlugins::version() const
 {
     return QString("1.0");
 }
+
+void WallpaperPlugins::showSetting()
+{
+
+}

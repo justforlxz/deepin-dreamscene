@@ -13,6 +13,7 @@ public:
     virtual QWidget *contentWidget() = 0;
     virtual const QString name() const = 0;
     virtual const QString version() const = 0;
+    virtual void showSetting() = 0;
 };
 
 QT_BEGIN_NAMESPACE

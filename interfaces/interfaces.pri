@@ -1,8 +1,8 @@
 DEFINES += QT_MESSAGELOGCONTEXT
 
 HEADERS += \
-            plugininterface.h \
-            proxyinterface.h
+            $$PWD/plugininterface.h \
+            $$PWD/proxyinterface.h
 
 INCLUDEPATH += $$PWD
 
