@@ -13,9 +13,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
     DPlatformWindowHandle::enableDXcbForWindow(this, true);
     DPlatformWindowHandle *handle = new DPlatformWindowHandle(this, this);
-    handle->setEnableBlurWindow(true);
+    handle->setEnableBlurWindow(false);
 
-    setAttribute(Qt::WA_TranslucentBackground);
+//    setAttribute(Qt::WA_TranslucentBackground);
 
     PackageManager *packageManager = new PackageManager;;
     BackgroundView *backgroundView = new BackgroundView;
@@ -25,14 +25,14 @@ MainWindow::MainWindow(QWidget *parent)
     QQuickWidget *view = new QQuickWidget;
     view->setAttribute(Qt::WA_TranslucentBackground, true);
 //    view->setAttribute(Qt::WA_AlwaysStackOnTop, true);
-    view->setClearColor(Qt::transparent);
+//    view->setClearColor(Qt::transparent);
 
+    view->rootContext()->setContextProperty("packageManager", packageManager);
     view->setSource(QUrl("qrc:/window.qml"));
 
     QObject *rootObject = qobject_cast<QObject*>(view->rootObject());
 
     if (rootObject) {
-        view->rootContext()->setContextProperty("packageManager", packageManager);
         connect(rootObject, SIGNAL(activated(QString)),
                 packageManager, SLOT(setActivate(QString)));
     }
