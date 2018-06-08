@@ -1,0 +1,12 @@
+{
+    "PackageID": "me.lxz.videowallpaper",
+    "Index": "libvideowallpaper.so",
+    "Author": {
+        "Name": "lxz",
+        "HomePage": "https://blog.ilxz.me",
+        "Desc": "this is a demo",
+        "PreviewImage": "preview.jpg",
+        "Email": "lxz@ilxz.me"
+    },
+    "Date": "date"
+}

@@ -115,6 +115,7 @@ void PackageManager::loadPlugin(const QString &path)
     }
 
     interface->init(this);
+    qDebug() << interface->name() << interface->version();
     emit requestSetItem(interface->contentWidget());
 }
 
