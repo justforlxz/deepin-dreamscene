@@ -1,7 +1,6 @@
 #include "packagemanager.h"
 #include "plugininterface.h"
 
-#include <QDir>
 #include <QFile>
 #include <QStandardPaths>
 #include <QDebug>
@@ -9,6 +8,7 @@
 #include <QJsonObject>
 #include <QLibrary>
 #include <QPluginLoader>
+#include <QApplication>
 
 /*
  package.json
@@ -42,16 +42,22 @@ QStringList PackageManager::packageList() const
 
 void PackageManager::refreshList()
 {
-    qDebug() << QStandardPaths::standardLocations(QStandardPaths::AppLocalDataLocation);
-    QDir dir(QStandardPaths::standardLocations(QStandardPaths::AppLocalDataLocation).first());
+    QDir pluginsDir(qApp->applicationDirPath());
+    pluginsDir.setSorting(QDir::Name);
 
-    dir.setFilter(QDir::Dirs);
-    const QFileInfoList &info = dir.entryInfoList();
+#ifdef QT_DEBUG
+    pluginsDir.cd("plugins");
+#else
+    pluginsDir.cd("../lib/deepin-dreamscene/");
+#endif
+    pluginsDir.setFilter(QDir::Dirs);
 
-    for (QFileInfo f : info) {
-        if(f.fileName()=="." || f.fileName() == "..") continue;
-        loadConfig(f.absoluteFilePath());
-    }
+    // load system packages
+    loadConfig(pluginsDir.entryInfoList());
+
+      // load local packages
+    pluginsDir.cd(QStandardPaths::standardLocations(QStandardPaths::AppLocalDataLocation).first());
+    loadConfig(pluginsDir.entryInfoList());
 }
 
 void PackageManager::setActivate(const QString &packageID)
@@ -110,4 +116,12 @@ void PackageManager::loadPlugin(const QString &path)
 
     interface->init(this);
     emit requestSetItem(interface->contentWidget());
+}
+
+void PackageManager::loadConfig(const QFileInfoList &infoList)
+{
+    for (const QFileInfo &f : infoList) {
+        if(f.fileName()=="." || f.fileName() == "..") continue;
+        loadConfig(f.absoluteFilePath());
+    }
 }

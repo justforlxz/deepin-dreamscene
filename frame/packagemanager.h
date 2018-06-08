@@ -8,6 +8,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QDebug>
+#include <QDir>
 
 struct AuthorInfo
 {
@@ -96,6 +97,7 @@ signals:
     void requestSetItem(QWidget * const content);
 
 private:
+    void loadConfig(const QFileInfoList &infoList);
     void loadConfig(const QString &folder);
     void loadPlugin(const QString &path);
 
